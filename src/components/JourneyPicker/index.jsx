@@ -7,7 +7,7 @@ return(
     <>
     <option value="">Vyberte</option>
     {cities.map((city) => (
-    <option key={city.code} value={city.name}>{city.name}</option>))}
+    <option key={city.code} value={city.code}>{city.name}</option>))}
     </>
     )}
 
@@ -43,7 +43,11 @@ useEffect(() => {
 
   const handleSubmit = (event) => {
     event.preventDefault(); 
-    console.log(`Odesílám formulář s cestou ${fromCity} ${toCity} ${date}`)
+    fetch(`https://apps.kodim.cz/daweb/leviexpress/api/journey?fromCity=${fromCity}&toCity=${toCity}&date=${date}`)
+    .then((response) => response.json())
+    .then((data) => onJourneyChange(data.results))
+
+    
   };
   
   return(
@@ -86,7 +90,7 @@ useEffect(() => {
           <button 
             className="btn" 
             type="submit"
-          
+          disabled={fromCity === "" || toCity === "" || date === "" ? true : false}
           > 
             Vyhledat spoj
           </button>
